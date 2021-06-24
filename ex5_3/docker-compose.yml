@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  nginx: # WEBサーバのコンテナの設定
+    image: nginx:1.13 # 使用するコンテナのイメージ名を記述
+    ports:
+      - "8000:8000" # ホストの8000ポートとコンテナの8000ポートを接続します。
+    volumes:
+      - ./docker/nginx/conf:/etc/nginx/conf.d # nginxの設定ファイルをマウントします。
+      - ./docker/nginx/uwsgi_params:/etc/nginx/uwsgi_params # nginxの設定ファイルをマウントします。
+      - ./static:/static # 静的ファイルのディレクトリをマウントします。
+    depends_on:
+      - python # アプリケーションサーバが起動してから起動させるため、アプリケーションサーバ用のコンテナとの依存関係を記述します。
+
+  db: # DBサーバのコンテナの設定
+    image: mysql:5.7 # 使用するコンテナのイメージ名を記述
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci # コンテナ起動時のコマンドを記述
+    ports:
+      - "3306:3306" # ホストの3306ポートとコンテナの3306ポートを接続します。
+    environment: # 環境変数の設定を行います。
+      MYSQL_ROOT_PASSWORD: root # データベースのルートパスワード
+      MYSQL_DATABASE: database # データベース名
+      MYSQL_USER: user # データベースのユーザー名
+      MYSQL_PASSWORD: password # データベースのパスワード
+      TZ: 'Asia/Tokyo' # タイムゾーンの設定
+    volumes:
+      - ./docker/mysql:/var/lib/mysql # データベースのデータを永続化するためにホストのボリュームをマウント
+      - ./docker/sql:/docker-entrypoint-initdb.d # データベースの設定ファイルをマウント
+
+  python: # アプリケーションサーバの設定
+    build: ./docker/python # ex5_3/docker/python/Dockerfileを使用してイメージをビルドするための設定
+    command: uwsgi --socket :8001 --module app.wsgi --py-autoreload 1 --logto /tmp/mylog.log # コンテナ起動時のコマンド
+    volumes:
+      - ./src:/code # djangoのアプリケーションファイルを保存するためのディレクトリをマウント
+      - ./static:/static # 静的ファイルのディレクトリをマウントします。
+    expose:
+      - "8001" # 公開するポートの設定
+    depends_on:
+      - db # DBサーバとの接続の設定
+
+
+#       上記のdocker-compose.ymlの中で特に重要な点は、portsの設定とdepends_onの設定になります。
+# portsはホストのポートとコンテナのポートを接続する設定になります。
+# depends_onはコンテナ間の依存関係を設定する構文です。上記のファイルでは、
+# dbコンテナ、pythonコンテナ、nginxコンテナの順番にコンテナが起動します。

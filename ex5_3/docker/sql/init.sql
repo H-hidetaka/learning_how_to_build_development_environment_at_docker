@@ -1,0 +1,3 @@
+GRANT ALL PRIVILEGES ON database.* TO 'user'@'%';
+
+FLUSH PRIVILEGES;
