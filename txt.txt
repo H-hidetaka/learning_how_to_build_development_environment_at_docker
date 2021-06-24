@@ -1,0 +1,139 @@
+以下の例では、webserverというサービスとredisという名前のサービスを作成し、インデントを下げて、それぞれのコンテナの詳細情報を設定しています。
+
+また、Dockerfileと同様に「#」以降はコメントになります。
+
+version: '3'
+
+services:
+  webserver:
+    image: ubuntu
+    ports:
+      - "80:80"
+    networks:
+      - webnet
+
+  redis:
+    image: redis
+    networks:
+      - webnet
+
+networks:
+  webnet:
+
+volumes:
+  data-volume:
+
+構成ず
+ex5_2
+├── Dockerfile
+├── Gemfile
+├── Gemfile.lock
+├── README.md
+├── Rakefile
+├── app
+│   ├── assets
+│   │   ├── config
+│   │   │   └── manifest.js
+│   │   ├── images
+│   │   ├── javascripts
+│   │   │   ├── application.js
+│   │   │   ├── cable.js
+│   │   │   └── channels
+│   │   └── stylesheets
+│   │       └── application.css
+│   ├── channels
+│   │   └── application_cable
+│   │       ├── channel.rb
+│   │       └── connection.rb
+│   ├── controllers
+│   │   ├── application_controller.rb
+│   │   └── concerns
+│   ├── helpers
+│   │   └── application_helper.rb
+│   ├── jobs
+│   │   └── application_job.rb
+│   ├── mailers
+│   │   └── application_mailer.rb
+│   ├── models
+│   │   ├── application_record.rb
+│   │   └── concerns
+│   └── views
+│       └── layouts
+│           ├── application.html.erb
+│           ├── mailer.html.erb
+│           └── mailer.text.erb
+├── bin
+│   ├── bundle
+│   ├── rails
+│   ├── rake
+│   ├── setup
+│   ├── update
+│   └── yarn
+├── config
+│   ├── application.rb
+│   ├── boot.rb
+│   ├── cable.yml
+│   ├── credentials.yml.enc
+│   ├── database.yml
+│   ├── environment.rb
+│   ├── environments
+│   │   ├── development.rb
+│   │   ├── production.rb
+│   │   └── test.rb
+│   ├── initializers
+│   │   ├── application_controller_renderer.rb
+│   │   ├── assets.rb
+│   │   ├── backtrace_silencers.rb
+│   │   ├── content_security_policy.rb
+│   │   ├── cookies_serializer.rb
+│   │   ├── filter_parameter_logging.rb
+│   │   ├── inflections.rb
+│   │   ├── mime_types.rb
+│   │   └── wrap_parameters.rb
+│   ├── locales
+│   │   └── en.yml
+│   ├── master.key
+│   ├── puma.rb
+│   ├── routes.rb
+│   ├── spring.rb
+│   └── storage.yml
+├── config.ru
+├── db
+│   └── seeds.rb
+├── docker-compose.yml
+├── lib
+│   ├── assets
+│   └── tasks
+├── log
+│   └── development.log
+├── package.json
+├── public
+│   ├── 404.html
+│   ├── 422.html
+│   ├── 500.html
+│   ├── apple-touch-icon-precomposed.png
+│   ├── apple-touch-icon.png
+│   ├── favicon.ico
+│   └── robots.txt
+├── storage
+├── test
+│   ├── application_system_test_case.rb
+│   ├── controllers
+│   ├── fixtures
+│   │   └── files
+│   ├── helpers
+│   ├── integration
+│   ├── mailers
+│   ├── models
+│   ├── system
+│   └── test_helper.rb
+├── tmp
+│   ├── cache
+│   │   ├── assets
+│   │   └── bootsnap-load-path-cache
+│   ├── development_secret.txt
+│   ├── pids
+│   ├── restart.txt
+│   ├── sockets
+│   └── storage
+└── vendor
